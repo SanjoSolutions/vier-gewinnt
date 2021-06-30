@@ -2,7 +2,7 @@ import random
 import time
 
 from main import VierGewinnt, print_state, NUMBER_OF_COLUMNS, get_available_actions, previous_player, next_player, step, \
-    determine_winner, determine_reward, Player, is_grid_full
+    determine_winner, determine_reward, Player, is_grid_full, is_done
 
 
 def main():
@@ -89,11 +89,7 @@ def choose_random_action(state):
 
 
 def is_terminal_node(node):
-    winner = determine_winner(node.state)
-    if winner is not None:
-        return True
-    else:
-        return is_grid_full(node.state)
+    return is_done(node.state)
 
 
 class Node:

@@ -32,12 +32,14 @@ class VierGewinnt:
         column = action
         self._grid = step(self._grid, column, self.current_player)
         state = self._get_state()
-        winner = self.determine_winner()
-        done = winner is not None
+        reward = determine_reward(self._grid, self.current_player)
+        done = self._is_done()
         if not done:
             self._next_player()
-        reward = determine_reward(self._grid, self.current_player)
         return state, reward, done
+
+    def _is_done(self):
+        return is_done(self._grid)
 
     def _get_state(self):
         return self._grid
@@ -77,6 +79,22 @@ def step(grid, column, player):
     grid = copy_grid(grid)
     grid[row][column] = player
     return grid
+
+
+def is_done(grid):
+    winner = determine_winner(grid)
+    if winner is not None:
+        return True
+    else:
+        return is_grid_full(grid)
+
+
+def is_grid_full(grid):
+    for row in range(0, NUMBER_OF_ROWS):
+        for column in range(0, NUMBER_OF_COLUMNS):
+            if grid[row][column] == CellState.Empty:
+                return False
+    return True
 
 
 def copy_grid(grid):
@@ -154,14 +172,6 @@ def determine_reward(grid, player):
     else:
         reward = 0
     return reward
-
-
-def is_grid_full(grid):
-    for row in range(0, NUMBER_OF_ROWS):
-        for column in range(0, NUMBER_OF_COLUMNS):
-            if grid[row][column] == CellState.Empty:
-                return False
-    return True
 
 
 def match(cells, cell_state):
