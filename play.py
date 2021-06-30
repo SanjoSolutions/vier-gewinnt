@@ -52,7 +52,7 @@ def mcts(game, state, number_of_iterations):
             state = step(parent.state, action, player)
             try:
                 node = next(node for node in parent.children if node.action == action)
-            except:
+            except StopIteration:
                 node = Node(player, action, state, parent)
                 parent.children.add(node)
             winner = determine_winner(node.state)
