@@ -1,4 +1,5 @@
 import random
+import time
 
 from main import VierGewinnt, print_state, NUMBER_OF_COLUMNS, get_available_actions, previous_player, next_player, step, \
     determine_winner, determine_reward, Player
@@ -29,7 +30,7 @@ def main():
 
 
 def choose_action(game, state):
-    action = mcts(game, state, 10000)
+    action = mcts(game, state, duration=10)
     return action
 
 
@@ -45,9 +46,10 @@ def choose_random_action(game, state):
 NUMBER_OF_PLAYERS = len(Player)
 
 
-def mcts(game, state, number_of_iterations):
+def mcts(game, state, duration):
+    start_time = time.time()
     current_node = Node(previous_player(game._current_player), None, state)
-    for iteration in range(number_of_iterations):
+    while time.time() - start_time < duration:
         node = current_node
         available_actions = get_available_actions(node.state)
         if len(available_actions) >= 1:
