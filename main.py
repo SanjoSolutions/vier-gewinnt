@@ -156,6 +156,14 @@ def determine_reward(grid, player):
     return reward
 
 
+def is_grid_full(grid):
+    for row in range(0, NUMBER_OF_ROWS):
+        for column in range(0, NUMBER_OF_COLUMNS):
+            if grid[row][column] == CellState.Empty:
+                return False
+    return True
+
+
 def match(cells, cell_state):
     return all(cell == cell_state for cell in cells)
 

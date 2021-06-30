@@ -2,7 +2,7 @@ import random
 import time
 
 from main import VierGewinnt, print_state, NUMBER_OF_COLUMNS, get_available_actions, previous_player, next_player, step, \
-    determine_winner, determine_reward, Player
+    determine_winner, determine_reward, Player, is_grid_full
 
 
 def main():
@@ -51,38 +51,49 @@ def mcts(game, state, duration):
     current_node = Node(previous_player(game._current_player), None, state)
     while time.time() - start_time < duration:
         node = current_node
-        available_actions = get_available_actions(node.state)
-        if len(available_actions) >= 1:
-            parent = node
-            player = next_player(parent.player)
-            action = random.choice(available_actions)
-            state = step(parent.state, action, player)
-            try:
-                node = next(node for node in parent.children if node.action == action)
-            except StopIteration:
-                node = Node(player, action, state, parent)
-                parent.children.add(node)
-            winner = determine_winner(node.state)
-            if winner:
-                reward = [
-                    determine_reward(node.state, player)
-                    for player
-                    in Player
-                ]
-                node.reward = reward
+        while not is_terminal_node(node):
+            available_actions = get_available_actions(node.state)
+            if len(available_actions) >= 1:
+                parent = node
+                player = next_player(parent.player)
+                action = random.choice(available_actions)
+                state = step(parent.state, action, player)
+                try:
+                    node = next(node for node in parent.children if node.action == action)
+                except StopIteration:
+                    node = Node(player, action, state, parent)
+                    parent.children.add(node)
+            else:
+                raise Exception('0 available states')
+        winner = determine_winner(node.state)
+        if winner:
+            reward = [
+                determine_reward(node.state, player)
+                for player
+                in Player
+            ]
+            while node:
+                for index in range(NUMBER_OF_PLAYERS):
+                    node.reward[index] += reward[index]
+                node.playouts += 1
                 node = node.parent
-                while node:
-                    for index in range(NUMBER_OF_PLAYERS):
-                        node.reward[index] += reward[index]
-                    node = node.parent
-        else:
-            raise Exception('0 available states')
 
     player = next_player(current_node.player)
-    node = max(current_node.children, key=lambda node: node.reward[player - 1])
+    if current_node.playouts >= 1:
+        node = max(current_node.children, key=lambda node: node.reward[player - 1] / float(node.playouts))
+    else:
+        node = random.choice(get_available_actions(current_node.state))
     action = node.action
 
     return action
+
+
+def is_terminal_node(node):
+    winner = determine_winner(node.state)
+    if winner is not None:
+        return True
+    else:
+        return is_grid_full(node.state)
 
 
 class Node:
@@ -91,6 +102,7 @@ class Node:
         self.action = action
         self.state = state
         self.reward = [0, 0]
+        self.playouts = 0
         self.parent = parent
         self.children = set()
 
