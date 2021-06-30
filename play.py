@@ -15,14 +15,17 @@ def main():
         return state
 
     state = new_game()
-    action = choose_action(game, state)
-    state, reward, done = game.step(action)
-    print_state(state)
 
-    if done:
-        winner = game.determine_winner()
-        print('Player ' + str(winner.value) + ' won.')
-        print('')
+    while True:
+        action = choose_action(game, state)
+        state, reward, done = game.step(action)
+        print_state(state)
+
+        if done:
+            winner = game.determine_winner()
+            print('Player ' + str(winner.value) + ' won.')
+            print('')
+            return
 
 
 def choose_action(game, state):
