@@ -6,8 +6,8 @@ NUMBER_OF_CELLS_TO_WIN = 4
 
 
 class Player(IntEnum):
-    One = 1
-    Two = 2
+    Red = 1
+    Yellow = 2
 
 
 class CellState(IntEnum):
@@ -19,7 +19,7 @@ class CellState(IntEnum):
 class VierGewinnt:
     def __init__(self):
         self._grid = None
-        self.current_player = Player.One
+        self.current_player = Player.Red
         self.reset()
 
     def reset(self):
