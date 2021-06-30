@@ -96,36 +96,36 @@ def get_first_empty_row(grid, column):
 def determine_winner(grid):
     for player in Player:
         for column in range(0, NUMBER_OF_COLUMNS):
-            for from_row in range(0, NUMBER_OF_ROWS - NUMBER_OF_CELLS_TO_WIN):
-                to_row = from_row + NUMBER_OF_CELLS_TO_WIN
+            for from_row in range(0, NUMBER_OF_ROWS - NUMBER_OF_CELLS_TO_WIN + 1):
+                to_row = from_row + NUMBER_OF_CELLS_TO_WIN - 1
                 cells = [
                     grid[row][column]
                     for row
-                    in range(from_row, to_row)
+                    in range(from_row, to_row + 1)
                 ]
                 if match(cells, player):
                     return player
 
         for row in range(0, NUMBER_OF_ROWS):
-            for from_column in range(0, NUMBER_OF_COLUMNS - NUMBER_OF_CELLS_TO_WIN):
-                to_column = from_column + NUMBER_OF_CELLS_TO_WIN
+            for from_column in range(0, NUMBER_OF_COLUMNS - NUMBER_OF_CELLS_TO_WIN + 1):
+                to_column = from_column + NUMBER_OF_CELLS_TO_WIN - 1
                 cells = [
                     grid[row][column]
                     for column
-                    in range(from_column, to_column)
+                    in range(from_column, to_column + 1)
                 ]
                 if match(cells, player):
                     return player
 
-        for from_row in range(0, NUMBER_OF_ROWS - NUMBER_OF_CELLS_TO_WIN):
-            to_row = from_row + NUMBER_OF_CELLS_TO_WIN
-            for from_column in range(0, NUMBER_OF_COLUMNS - NUMBER_OF_CELLS_TO_WIN):
-                to_column = from_column + NUMBER_OF_CELLS_TO_WIN
+        for from_row in range(0, NUMBER_OF_ROWS - NUMBER_OF_CELLS_TO_WIN + 1):
+            to_row = from_row + NUMBER_OF_CELLS_TO_WIN - 1
+            for from_column in range(0, NUMBER_OF_COLUMNS - NUMBER_OF_CELLS_TO_WIN + 1):
+                to_column = from_column + NUMBER_OF_CELLS_TO_WIN - 1
 
                 cells = []
                 row = from_row
                 column = from_column
-                while row < to_row and column < to_column:
+                while row <= to_row and column <= to_column:
                     cells.append(grid[row][column])
                     row += 1
                     column += 1
@@ -135,7 +135,7 @@ def determine_winner(grid):
                 cells = []
                 row = from_row
                 column = to_column
-                while row < to_row and column > from_column:
+                while row <= to_row and column >= from_column:
                     cells.append(grid[row][column])
                     row += 1
                     column -= 1
