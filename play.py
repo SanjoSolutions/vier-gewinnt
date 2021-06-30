@@ -72,9 +72,9 @@ def mcts(game, state, duration):
     player = next_player(current_node.player)
     if current_node.playouts >= 1:
         node = max(current_node.children, key=lambda node: node.reward[player - 1] / float(node.playouts))
+        action = node.action
     else:
-        node = choose_random_action(current_node.state)
-    action = node.action
+        action = choose_random_action(current_node.state)
 
     return action
 
