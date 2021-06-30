@@ -10,7 +10,9 @@ def main():
     def new_game():
         print('New game:')
         print('')
-        return game.reset()
+        state = game.reset()
+        print_state(state)
+        return state
 
     state = new_game()
     action = choose_action(game, state)
