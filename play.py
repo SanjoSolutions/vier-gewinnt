@@ -73,9 +73,18 @@ def mcts(game, state, duration):
     if current_node.playouts >= 1:
         node = max(current_node.children, key=lambda node: node.reward[player - 1] / float(node.playouts))
     else:
-        node = random.choice(get_available_actions(current_node.state))
+        node = choose_random_action(current_node.state)
     action = node.action
 
+    return action
+
+
+def choose_random_action(state):
+    available_actions = get_available_actions(state)
+    if len(available_actions) >= 1:
+        action = random.choice(available_actions)
+    else:
+        raise Exception('All columns seem to be full.')
     return action
 
 
