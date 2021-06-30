@@ -1,8 +1,8 @@
 import random
 import time
 
-from main import VierGewinnt, print_state, NUMBER_OF_COLUMNS, get_available_actions, previous_player, next_player, step, \
-    determine_winner, determine_reward, Player, is_grid_full, is_done
+from main import VierGewinnt, print_state, get_available_actions, previous_player, next_player, step, \
+    determine_winner, determine_reward, Player, is_done
 
 
 def main():
