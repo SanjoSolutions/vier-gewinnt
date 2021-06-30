@@ -19,7 +19,7 @@ class CellState(IntEnum):
 class VierGewinnt:
     def __init__(self):
         self._grid = None
-        self._current_player = Player.One
+        self.current_player = Player.One
         self.reset()
 
     def reset(self):
@@ -30,13 +30,13 @@ class VierGewinnt:
 
     def step(self, action):
         column = action
-        self._grid = step(self._grid, column, self._current_player)
+        self._grid = step(self._grid, column, self.current_player)
         state = self._get_state()
         winner = self.determine_winner()
         done = winner is not None
         if not done:
             self._next_player()
-        reward = determine_reward(self._grid, self._current_player)
+        reward = determine_reward(self._grid, self.current_player)
         return state, reward, done
 
     def _get_state(self):
@@ -49,7 +49,7 @@ class VierGewinnt:
         return determine_winner(self._grid)
 
     def _next_player(self):
-        self._current_player = next_player(self._current_player)
+        self.current_player = next_player(self.current_player)
 
 
 def next_player(player):

@@ -34,21 +34,12 @@ def choose_action(game, state):
     return action
 
 
-def choose_random_action(game, state):
-    available_actions = game.get_available_actions()
-    if len(available_actions) >= 1:
-        action = random.choice(available_actions)
-    else:
-        raise Exception('All columns seem to be full.')
-    return action
-
-
 NUMBER_OF_PLAYERS = len(Player)
 
 
 def mcts(game, state, duration):
     start_time = time.time()
-    current_node = Node(previous_player(game._current_player), None, state)
+    current_node = Node(previous_player(game.current_player), None, state)
     while time.time() - start_time < duration:
         node = current_node
         while not is_terminal_node(node):
